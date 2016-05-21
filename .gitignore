@@ -1,4 +1,6 @@
-'*.pyc'
-'config/api_keys.py'
-'.DS_Store'
-'__pycache__'
+# y
+Files to be ignored
+*.pyc
+config/api_keys.py
+.DS_Store
+*__pycache__
