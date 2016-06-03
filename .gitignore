@@ -4,3 +4,5 @@ Files to be ignored
 config/api_keys.py
 .DS_Store
 *__pycache__
+*.sqlite3
+
