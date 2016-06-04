@@ -8,6 +8,9 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
 
+    class Meta:
+        verbose_name_plural = 'categories'
+
     def __str__(self):  #For Python 2, use __unicode__ tango_django_project
         return self.name
     def __unicode__(self):  #For Python 2, use __unicode__ tango_django_project
