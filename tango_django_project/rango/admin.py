@@ -4,5 +4,8 @@ from rango.models import Category, Page
 # Register your models here.
 
 
+class PageAdmin(admin.ModelAdmin):
+    list_display = ['title', 'url', 'category', 'views']
+
 admin.site.register(Category)
-admin.site.register(Page)
+admin.site.register(Page, PageAdmin)
