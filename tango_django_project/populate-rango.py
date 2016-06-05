@@ -57,18 +57,34 @@ def populate():
 
     # Print out the categories we have added.
     for c in Category.objects.all():
-        for p in Page.objects.filter(category=c):
+        for p in Page.objects.filter(category = c):
             print("- {0} - {1}".format(str(c), str(p)))
 
 def add_page(cat, title, url, views=0):
     p = Page.objects.get_or_create(category=cat, title=title)[0]
     p.url = url
-    p.views=views
+    p.views = views
     p.save()
     return p
 
 def add_cat(name):
     c = Category.objects.get_or_create(name=name)[0]
+    if c.name == "Django":
+        c.views = 128; c.likes = 64
+    elif c.name == "Python":
+        c.views = 64; c.likes = 32
+    else:
+        c.views = 32; c.likes = 0
+
+    """if c.name == "Python":
+        c.likes = 64
+    if c.name == "Django":
+        c.likes = 32
+    if c.name == "Other Frameworks":
+        c.likes = 16
+    else:
+        c.likes = likes"""
+
     c.save()
     return c
 
