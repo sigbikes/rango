@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
 # Import Category model for index page
-from rango.models import Category
+from rango.models import Category, Page
 
 def index(request):
     # Query the database for a list of ALL categories currently stored.
@@ -25,3 +25,31 @@ def about(request):
 
     # return response
     return render(request, 'rango/about.html')
+
+def show_category(request, category_name_slug):
+    # Create a context dictionary to pass to the template render engine
+    context_dict = {}
+
+    try:
+        # Find a category name slug with the given name.
+        # If not .get() rasies a DoesNotExist exception
+        # .get() returns a model instance or throws the expcetion
+        category = Category.objects.get(slug=category_name_slug)
+
+        # Retrieve all associated Pages.
+        # Note filter() returns a list of objects or an empty list
+        pages = Page.objects.filter(category=category)
+
+        # Results are added to context dictionary
+        context_dict['pages'] = pages
+
+        # Add categories as well to verify they exist
+        context_dict['category'] = category
+    except Category.DoesNotExist:
+        # CONDITION: Category not found
+        # RESULT: Do nothing and return "No Category" message
+        context_dict['category'] = None
+        context_dict['pages'] = None
+
+    # Render the response back to client
+    return render(request, 'rango/category.html', context_dict)
