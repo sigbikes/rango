@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 # Import Category model for index page
 from rango.models import Category, Page
+from rango.forms import CategoryForm
 
 def index(request):
     # Query the database for a list of ALL categories currently stored.
@@ -54,3 +55,24 @@ def show_category(request, category_name_slug):
 
     # Render the response back to client
     return render(request, 'rango/category.html', context_dict)
+
+def add_category(request):
+
+    form = CategoryForm()
+
+    # A HTTP POST?
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            # Save the new category to the database.
+            form.save(commit = True)
+            # Could return a message but most recent Cats are on the index Page
+            # Thus we redirect to the index
+            return index(request)
+        else:
+            #If forms have errors - print them to the terminal.
+            print(form.errors)
+    # This handles bad forms, new forms, or no forms.
+    # Render the for with error messages (if any).
+    return render(request, 'rango/add_category.html', {'form': form})
