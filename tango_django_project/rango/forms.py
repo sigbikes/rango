@@ -22,13 +22,16 @@ class CategoryForm(forms.ModelForm):
         fields = ('name',)
 
 class PageForm(forms.ModelForm):
+
     title = forms.CharField(max_length = 128, help_text = "Enter a Page Title.")
     url = forms.URLField(max_length = 200, help_text = "Enter the Page URL." )
     views = forms.IntegerField(widget = forms.HiddenInput(), initial = 0)
+    category = forms.ModelChoiceField(queryset = Category.objects.all(), empty_label = None)
 
     class Meta:
         #Provide an association between ModelForm and Model
         model = Page
+        
         # What fields do we want to include in our form?
         # This way we don't need every field in the model present.
         # Some fields may allow NULL values, so we may not want to include them.
@@ -37,3 +40,13 @@ class PageForm(forms.ModelForm):
         exclude = ('category',)
         # or specify the fields to include (and thus exclude category)
         # fields =  ('title', 'url', 'views')
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        url = cleaned_data.get('url')
+        # Prepend 'http://' if not present and url not empty
+        if url and not url.startswith('http://'):
+            url = 'http://' + url
+            cleaned_data['url'] = url
+
+            return cleaned_data
