@@ -26,8 +26,9 @@ class PageForm(forms.ModelForm):
     title = forms.CharField(max_length = 128, help_text = "Enter a Page Title.")
     url = forms.URLField(max_length = 200, help_text = "Enter the Page URL." )
     views = forms.IntegerField(widget = forms.HiddenInput(), initial = 0)
-    category = forms.ModelChoiceField(queryset = Category.objects.all(), empty_label = None)
+    category = forms.ModelChoiceField(queryset = Category.objects.all(), to_field_name = 'name')
 
+    #category_id =
     class Meta:
         #Provide an association between ModelForm and Model
         model = Page
@@ -37,9 +38,9 @@ class PageForm(forms.ModelForm):
         # Some fields may allow NULL values, so we may not want to include them.
         # Here, we are hiding the foreign key.
         # we can either exclude the category field from the form,
-        exclude = ('category',)
+        #exclude = ('category',)
         # or specify the fields to include (and thus exclude category)
-        # fields =  ('title', 'url', 'views')
+        fields =  ('title', 'url', 'views', 'category')
 
     def clean(self):
         cleaned_data = self.cleaned_data
