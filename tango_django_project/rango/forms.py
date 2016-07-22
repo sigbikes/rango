@@ -27,7 +27,7 @@ class PageForm(forms.ModelForm):
     title = forms.CharField(max_length = 128, help_text = "Enter a Page Title.")
     url = forms.URLField(max_length = 200, help_text = "Enter the Page URL.", widget = TextInput)
     views = forms.IntegerField(widget = forms.HiddenInput(), initial = 50)
-    category = forms.ModelChoiceField(queryset = Category.objects.all(), to_field_name = 'name')
+    category = forms.ModelChoiceField(queryset = Category.objects.all(), help_text = "Select a Category.")
 
     #category_id =
     class Meta:
