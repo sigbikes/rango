@@ -7,6 +7,7 @@ Created on Mon Jul 11 17:01:15 2016
 from django import forms
 #from django.forms import ModelForm
 from rango.models import Page, Category
+from django.forms.widgets import TextInput
 
 
 class CategoryForm(forms.ModelForm):
@@ -24,8 +25,8 @@ class CategoryForm(forms.ModelForm):
 class PageForm(forms.ModelForm):
 
     title = forms.CharField(max_length = 128, help_text = "Enter a Page Title.")
-    url = forms.URLField(max_length = 200, help_text = "Enter the Page URL." )
-    views = forms.IntegerField(widget = forms.HiddenInput(), initial = 0)
+    url = forms.URLField(max_length = 200, help_text = "Enter the Page URL.", widget = TextInput)
+    views = forms.IntegerField(widget = forms.HiddenInput(), initial = 50)
     category = forms.ModelChoiceField(queryset = Category.objects.all(), to_field_name = 'name')
 
     #category_id =
@@ -44,6 +45,7 @@ class PageForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = self.cleaned_data
+        #cleaned_data = super(PageForm,self).clean()
         url = cleaned_data.get('url')
         # Prepend 'http://' if not present and url not empty
         if url and not url.startswith('http://'):
